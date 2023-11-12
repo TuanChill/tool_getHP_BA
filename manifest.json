@@ -1,0 +1,15 @@
+{
+    "manifest_version": 3,
+    "name": "Get the hoc Phan",
+    "description": "Tool hỗ trợ treo môn học phần",
+    "version": "1.0",
+    "action": {
+      "default_icon": "Logo.png"
+    },
+    "content_scripts": [
+      {
+        "matches": ["http://regist.hvnh.edu.vn/*"],
+        "js": ["js/bg.js"]
+      }
+    ]
+}
