@@ -3,9 +3,14 @@ const user = {
   password: "Aidayma2@",
 };
 
-const tinchis = ["IS25A", "MIS02A"];
+const input = [
+  { HP: "IS25A", LHP: "232IS25A01" },
+  { HP: "MIS02A", LHP: "232MIS02A01" },
+];
 
-const HP_name = ["K24CNTTA"];
+// const tinchis = ["IS25A", "IS46A"];
+
+// const HP_name = ["232IS25A01", "232IS46A01"];
 
 // const regexHP_atag = "/GetClassStudyUnit\('([^']+)','([^']+)','([^']+)'\)/";
 
@@ -21,8 +26,8 @@ const observer = new MutationObserver((mutations) => {
       const trHocPhans = divDanhsachHp.getElementsByTagName("tr");
       console.log(trHocPhans);
       Array.from(trHocPhans).forEach((e) => {
-        tinchis.forEach((item) => {
-          if (e.innerText.toLowerCase().includes(item.toLowerCase())) {
+        input.forEach((item) => {
+          if (e.innerText.toLowerCase().includes(item.HP.toLowerCase())) {
             console.log(e);
             const atag = e.getElementsByTagName("a")[0];
             // console.log(atag.href)
@@ -51,20 +56,17 @@ const observer = new MutationObserver((mutations) => {
                 const tr_thisHP = doc.getElementsByTagName("tr");
                 console.log(tr_thisHP);
                 Array.from(tr_thisHP).forEach((e) => {
-                  HP_name.forEach((item) => {
-                    if (
-                      e.innerText.toLowerCase().includes(item.toLowerCase())
-                    ) {
-                      const id_HP = e.getElementsByTagName("input")[0].id;
-                      console.log(id_HP)
-                      fetch(
-                        `http://regist.hvnh.edu.vn/DangKyHocPhan/DangKy?Hide=${id_HP}|&acceptConflict=false&classStudyUnitConflictId=&RegistType=HB`
-                      )
-                        .finally((res) => {
-                            console.log(res);
-                        })
-                    }
-                  });
+                  if (
+                    e.innerText.toLowerCase().includes(item.LHP.toLowerCase())
+                  ) {
+                    const id_HP = e.getElementsByTagName("input")[0].id;
+                    console.log(id_HP);
+                    fetch(
+                      `http://regist.hvnh.edu.vn/DangKyHocPhan/DangKy?Hide=${id_HP}|&acceptConflict=false&classStudyUnitConflictId=&RegistType=HB`
+                    ).finally((res) => {
+                      console.log(res);
+                    });
+                  }
                 });
                 // console.log(tbodyContent);
               })
@@ -87,13 +89,6 @@ const observerOptions = {
 const register = async () => {
   const currentHref = window.location.href;
   if (currentHref == "http://regist.hvnh.edu.vn/") {
-    // Promise.all(tinchis.map(tin => fetch(tin)))
-    //     .then(() => {
-    //         console.log("done");
-    //     })
-    //     .catch(() => {
-    //         console.log("err")
-    //     })
     const HB = await document.getElementById("HB");
     if (HB) {
       await HB.click();
@@ -110,7 +105,7 @@ const register = async () => {
     }, 1500);
   }
 };
-const login = () => {
+const func = () => {
   const currentHref = window.location.href;
   if (
     currentHref == "http://regist.hvnh.edu.vn/Login" ||
@@ -125,18 +120,12 @@ const login = () => {
 
     form.submit();
   }
-  // register();
 };
 
-// const reLogin = setTimeout(() => {
-//      window.location.reload();
-//      login();
-//  }, 3000)
-
-// const reRegist = setTimeout(() => {
-//     register();
-// }, 2000)
-
-login();
+func();
 
 register();
+
+setTimeout(() => {
+  window.location.reload();
+}, 3000);
